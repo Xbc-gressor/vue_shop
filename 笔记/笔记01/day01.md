@@ -38,7 +38,7 @@ B. 在 `vue_api_server` 中先`npm install `安装依赖，然后`npm app.js`运
 
 ## 5. 实现登录功能
 
-### 1）. 基本
+### 1） 基本
 
 A.登录状态保持
 如果服务器和客户端**同源**，建议可以使用**cookie**或者**session**来保持登录状态
@@ -53,7 +53,7 @@ C.然后执行`vue ui`命令打开ui界面，然后运行serve，运行app查看
 ![](images/ui界面启动项目.jpg)
 
 发现现在是一个默认页面，我们需要进行更改，打开项目的`src`目录，点击`main.js`文件（入口文件）
-```
+```javascript
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -70,7 +70,7 @@ new Vue({
 ```
 * 再打开`App.vue`(根组件)，将根组件的内容进行操作梳理(template中留下根节点，script中留下默认导出，去掉组件，style中去掉所有样式)
 
-```
+```vue
 <template>
   <div id="app">
     <router-view></router-view>
@@ -88,7 +88,8 @@ export default {
 ```
 * 再**打开`index.js`(路由)**，将routes数组中的路由规则清除，然后**将`views`删除**，**将components中的`helloworld.vue`删除**
 
-```
+```javascript
+/* insex.js */
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -102,7 +103,7 @@ export default new Router({
 ```
 * 在components文件夹中新建`Login.vue`组件,添加template，script，style标签,**style标签中的scoped可以防止组件之间的样式冲突**，没有scoped则样式是全局的
 
-```
+```vue
 <template>
     <div class="login_container">
         
@@ -126,13 +127,13 @@ export default {
 
 
 
-
-### 2）. 添加一些配置
+### 2）添加一些配置
 
 **A.  添加element-ui的表单组件**
 在`plugins`文件夹中打开`element.js`文件，进行`element-ui`的按需导入
 
 ```javascript
+/* element.js */
 import Vue from 'vue'
 import { Button } from 'element-ui'
 import { Form, FormItem } from 'element-ui'
@@ -163,7 +164,7 @@ this.$message.error('登录失败')
  2. 在入口文件`main.js`中导入`import './assets/fonts/iconfont.css'`
     然后直接设置input框的`prefix-icon`属性
 
-    ```javascript
+    ```vue
      <el-input prefix-icon="iconfont icon-3702mima"></el-input>
     ```
 
@@ -176,6 +177,7 @@ this.$message.error('登录失败')
 2. 在`script`中的`data`中添加`rules`：
 
     ```javascript
+    /* Login.vue */
     export default{ 
         data(){return{
             ......, 
@@ -208,7 +210,7 @@ this.$message.error('登录失败')
 
 **D. 在`index.js`中导入组件并设置规则，再在`App.vue`中添加 路由占位符**
 
-```
+```javascript
 const router = new Router({
   routes: [
     { path: '/', redirect: '/login' },
@@ -225,7 +227,7 @@ const router = new Router({
 
 1. 在assets文件夹下面添加`css`文件夹，创建`global.css`文件,添加全局样式
 
-```
+```css
 /* 全局样式表 */
 html,body,#app{
     width: 100%;
@@ -240,9 +242,9 @@ html,body,#app{
 
      
 
-### 3）. 导入`axios`以发送ajax请求
+### 3）导入`axios`以发送ajax请求
 
-1. 打开main.js，`import axios from 'axios';`
+1. 打开`main.js`，`import axios from 'axios';`
 
 2. 设置请求的根路径：`axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/';`
 
@@ -252,7 +254,7 @@ html,body,#app{
 
 
 
-### 4）.登录成功之后的操作
+### 4）登录成功之后的操作
 
 A. 登录成功之后，需要**将后台返回的`token`保存到`sessionStorage`中**
 	操作完毕之后，需要跳转到/home
@@ -285,7 +287,7 @@ login() {
 ```
 **B. 添加一个组件`Home.vue`，并为之添加规则**
 
-```javascript
+```vue
 <template>
     <div>
         this is home
@@ -309,7 +311,8 @@ export default {
 </style>
 ```
 ​		添加路由规则
-```
+```javascript
+/* index.js */
 const router = new Router({
   routes: [
     { path: '/', redirect: '/login' },
