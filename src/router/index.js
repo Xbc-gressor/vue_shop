@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
+import Welcome from '../components/Welcome.vue'
+import User from '../components/user/User.vue'
 
 Vue.use(Router)
 
@@ -33,7 +35,12 @@ const router = new Router({
   routes: [
     { path: '/', redirect: '/login' },
     { path: '/login', name: 'login', component: Login },
-    { path: '/home', name: 'home', component: Home }
+    { path: '/home', redirect: '/welcome', name: 'home', component: Home, // redirect 的在主页加载的时候，通过占位符也被加载
+      children: [
+        { path: '/welcome', component: Welcome },
+        { path: '/users', component: User }
+      ] },
+
   ]
 })
 
