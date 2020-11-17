@@ -200,7 +200,7 @@ iconsObj: {
 
     
 
-3. 打开`Home.vue`，在main的主体结构中添加一个路由占位符
+3. 打开`Home.vue`，在main的主体结构中添加一个路由占位符，之后**将子组件加载到这个地方**
 
     ```vue
     <el-main>
@@ -229,30 +229,47 @@ iconsObj: {
 
 
 
-###8.完成用户列表主体区域
-新建用户列表组件  user/Users.vue
-在router.js中导入子级路由组件Users.vue，并设置路由规则
+##  4. 完成用户列表主体区域
 
-当点击二级菜单的时候，被点击的二级子菜单并没有高亮，我们需要正在被使用的功能高亮显示
-我们可以通过设置el-menu的default-active属性来设置当前激活菜单的index
-但是default-active属性也不能写死，固定为某个菜单值
-所以我们可以先给所有的二级菜单添加点击事件,并将path值作为方法的参数
-@click="saveNavState('/'+subItem.path)"
-在saveNavState方法中将path保存到sessionStorage中
-saveNavState( path ){
-  //点击二级菜单的时候保存被点击的二级菜单信息
-  window.sessionStorage.setItem("activePath",path);
-  this.activePath = path;
-}
-然后在数据中添加一个activePath绑定数据，并将el-menu的default-active属性设置为activePath
-最后在created中将sessionStorage中的数据赋值给activePath
-this.activePath = window.sessionStorage.getItem("activePath")
+### 1) 页面布局
 
-###9.绘制用户列表基本结构
-A.使用element-ui面包屑组件完成顶部导航路径(复制面包屑代码，在element.js中导入组件Breadcrumb,BreadcrumbItem)
-B.使用element-ui卡片组件完成主体表格(复制卡片组件代码，在element.js中导入组件Card)，再使用element-ui输入框完成搜索框及搜索按钮，
-此时我们需要使用栅格布局来划分结构(复制卡片组件代码，在element.js中导入组件Row，Col)，然后再使用el-button制作添加用户按钮
-```
+1. 新建用户列表组件  `user/User.vue`
+    在index.js中导入子级路由组件`User.vue`，并设置路由规则
+
+2. **让正在被使用的功能高亮显示**
+
+    我们可以通过设置`el-menu`的`default-active`属性来设置当前激活菜单的`index`
+    但是default-active属性也不能写死，固定为某个菜单值
+    所以我们可以先给所有的二级菜单添加点击事件,并将path值作为方法的参数
+
+    ```javascript
+    @click="saveNavState('/'+subItem.path)"
+    // 在saveNavState方法中将path保存到sessionStorage中
+    saveNavState( path ){
+      // 点击二级菜单的时候保存被点击的二级菜单信息
+      window.sessionStorage.setItem("activePath",path);
+      this.activePath = path;
+    }
+    ```
+
+    
+
+    然后在数据中添加一个`activePath`绑定数据，并将`el-menu`的`default-active`属性设置为`activePath`
+    最后在created中将`sessionStorage`中的数据赋值给`activePath`
+
+    ```javascript
+    this.activePath = window.sessionStorage.getItem("activePath")
+    ```
+
+    
+
+3. 完成页面
+
+    **A.** 使用 **`element-ui`面包屑组件** 完成顶部导航路径（导入组件`Breadcrumb`, `BreadcrumbItem`）
+    **B. **使用 `element-ui`**卡片组件** 完成主体表格（导入组件`Card`）
+    **C. **此时我们需要使用 **栅格布局** 来划分结构。（导入组件`Row`，`Col`)，然后再使用`el-button`制作添加用户按钮
+
+```vue
 <div>
     <h3>用户列表组件</h3>
     <!-- 面包屑导航 -->
@@ -277,8 +294,16 @@ B.使用element-ui卡片组件完成主体表格(复制卡片组件代码，在e
     </el-card>
 </div>
 ```
-###10.请求用户列表数据
-```
+
+
+
+
+
+### 2）实现用户界面基本逻辑
+
+**1.  请求用户列表数据**
+
+```vue
 <script>
 export default {
   data() {
@@ -294,7 +319,7 @@ export default {
       total:0
     }
   },
-  created() {
+  created() { // 页面一创建就要请求数据
     this.getUserList()
   },
   methods: {
@@ -314,15 +339,16 @@ export default {
 }
 </script>
 ```
-###11.将用户列表数据展示
-使用表格来展示用户列表数据，使用element-ui表格组件完成列表展示数据(复制表格代码，在element.js中导入组件Table,TableColumn)
-在渲染展示状态时，会使用作用域插槽获取每一行的数据
-再使用switch开关组件展示状态信息(复制开关组件代码，在element.js中导入组件Switch)
+**2. 将用户列表数据展示**
+
+​	**A.** 使用 **表格** 来展示用户列表数据，(导入组件`Table`,`TableColumn`)，在渲染展示状态时，会使用**作用域插槽**获取每一行的数据
+​	**B.** 再使用 `switch`**开关组件** 展示状态信息(导入组件`Switch`)
 而渲染操作列时，也是使用作用域插槽来进行渲染的，
-在操作列中包含了修改，删除，分配角色按钮，当我们把鼠标放到分配角色按钮上时
-希望能有一些文字提示，此时我们需要使用文字提示组件(复制文字提示组件代码，在element.js中导入组件Tooltip),将分配角色按钮包含
+​	**C.** 在操作列中包含了修改，删除，分配角色按钮，当我们把鼠标放到分配角色按钮上时
+希望能有一些文字提示，此时我们需要使用**文字提示组件**(导入组件`Tooltip`),将分配角色按钮包含
 代码结构如下：
-```
+
+```vue
 <!-- 用户列表(表格)区域 -->
 <el-table :data="userList" border stripe>
     <el-table-column type="index"></el-table-column>
@@ -331,12 +357,12 @@ export default {
     <el-table-column label="电话" prop="mobile"></el-table-column>
     <el-table-column label="角色" prop="role_name"></el-table-column>
     <el-table-column label="状态">
-        <template slot-scope="scope">
+        <template v-slot="scope">
             <el-switch v-model="scope.row.mg_state"></el-switch>
         </template>
     </el-table-column>
     <el-table-column label="操作" width="180px">
-        <template slot-scope="scope">
+        <template v-slot="scope">
             <!-- 修改 -->
             <el-button type="primary" icon="el-icon-edit" size='mini'></el-button>
             <!-- 删除 -->
@@ -350,10 +376,11 @@ export default {
 </el-table>
 ```
 
-###12.实现用户列表分页
-A.使用表格来展示用户列表数据，可以使用分页组件完成列表分页展示数据(复制分页组件代码，在element.js中导入组件Pagination)
-B.更改组件中的绑定数据
-```
+**3. 实现用户列表分页**
+	**3.1** 使用**表格**来展示用户列表数据，可以使用**分页组件**完成列表分页展示数据(导入组件`Pagination`)
+	**3.2** 更改组件中的绑定数据
+
+```vue
 <!-- 分页导航区域 
 @size-change(pagesize改变时触发) 
 @current-change(页码发生改变时触发)
@@ -363,8 +390,8 @@ B.更改组件中的绑定数据
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pagenum" :page-sizes="[1, 2, 5, 10]" :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
 ```
-C.添加两个事件的事件处理函数@size-change，@current-change
-```
+​	**3.3** 添加两个事件的事件处理函数`@size-change`，`@current-change`
+```javascript
 handleSizeChange(newSize) {
   //pagesize改变时触发，当pagesize发生改变的时候，我们应该
   //以最新的pagesize来请求数据并展示数据
@@ -383,18 +410,18 @@ handleCurrentChange( current ) {
 }
 ```
 
-###13.实现更新用户状态
-当用户点击列表中的switch组件时，用户的状态应该跟随发生改变。
-A.首先监听用户点击switch组件的事件，并将作用域插槽的数据当做事件参数进行传递
+​	**3.4** 实现更新用户状态
+​		当用户点击列表中的switch组件时，用户的状态应该跟随发生改变。
+​		3.4.1 首先监听用户点击switch组件的事件，并将作用域插槽的数据当做事件参数进行传递
 
-```
+```vue
 <el-switch v-model="scope.row.mg_state" @change="userStateChanged(scope.row)"></el-switch>
 ```
 
 
-B.在事件中发送请求完成状态的更改
+​		3.4.2 在事件中发送请求完成状态的更改
 
-```
+```javascript
 async userStateChanged(row) {
   //发送请求进行状态修改
   const { data: res } = await this.$http.put(
@@ -409,10 +436,16 @@ async userStateChanged(row) {
 },
 ```
 
-###14.实现搜索功能
-添加数据绑定，添加搜索按钮的点击事件(当用户点击搜索按钮的时候，调用getUserList方法根据文本框内容重新请求用户列表数据)
+
+
+**4. 实现搜索功能**
+
+---
+
+添加数据绑定，添加搜索按钮的点击事件(当用户点击搜索按钮的时候，调用`getUserList`方法根据文本框内容重新请求用户列表数据)
 当我们在输入框中输入内容并点击搜索之后，会按照搜索关键字搜索，我们希望能够提供一个X删除搜索关键字并重新获取所有的用户列表数据，只需要给文本框添加clearable属性并添加clear事件，在clear事件中重新请求数据即可
-```
+
+```vue
 <el-col :span="7">
     <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getUserList">
         <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
@@ -420,13 +453,19 @@ async userStateChanged(row) {
 </el-col>
 ```
 
-###15.实现添加用户
-A.当我们点击添加用户按钮的时候，弹出一个对话框来实现添加用户的功能，首先我们需要复制对话框组件的代码并在element.js文件中引入Dialog组件
 
-B.接下来我们要为“添加用户”按钮添加点击事件，在事件中将addDialogVisible设置为true，即显示对话框
 
-C.更改Dialog组件中的内容
-```
+**5.实现添加用户**
+
+---
+
+​	**5.1** 当我们点击添加用户按钮的时候，弹出一个**对话框**来实现添加用户的功能（引入`Dialog`组件）
+
+​	**5.2** 接下来我们要为“添加用户”按钮添加点击事件，在事件中将`addDialogVisible`设置为true，即显示对话框
+
+​	**5.3** 布局`Dialog`组件中的内容
+
+```vue
 <!-- 对话框组件  :visible.sync(设置是否显示对话框) width(设置对话框的宽度)
 :before-close(在对话框关闭前触发的事件) -->
 <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="50%">
@@ -452,8 +491,8 @@ C.更改Dialog组件中的内容
     </span>
 </el-dialog>
 ```
-D.添加数据绑定和校验规则：
-```
+​	**5.4** 添加数据绑定和校验规则：
+```javascript
 data() {
   //验证邮箱的规则
   var checkEmail = (rule, value, cb) => {
@@ -464,25 +503,8 @@ data() {
     //返回一个错误提示
     cb(new Error('请输入合法的邮箱'))
   }
-  //验证手机号码的规则
-  var checkMobile = (rule, value, cb) => {
-    const regMobile = /^1[34578]\d{9}$/
-    if (regMobile.test(value)) {
-      return cb()
-    }
-    //返回一个错误提示
-    cb(new Error('请输入合法的手机号码'))
-  }
+
   return {
-    //获取查询用户信息的参数
-    queryInfo: {
-      // 查询的条件
-      query: '',
-      // 当前的页数，即页码
-      pagenum: 1,
-      // 每页显示的数据条数
-      pagesize: 2
-    },
     //保存请求回来的用户列表数据
     userList: [],
     total: 0,
@@ -490,57 +512,38 @@ data() {
     addDialogVisible: false,
     // 添加用户的表单数据
     addForm: {
-      username: '',
-      password: '',
-      email: '',
-      mobile: ''
+      username: '', password: '', email: '', mobile: ''
     },
     // 添加表单的验证规则对象
     addFormRules: {
-      username: [
-        { required: true, message: '请输入用户名称', trigger: 'blur' },
-        {
-          min: 3,
-          max: 10,
-          message: '用户名在3~10个字符之间',
-          trigger: 'blur'
-        }
-      ],
+      username: [ ],
       password: [
         { required: true, message: '请输入密码', trigger: 'blur' },
-        {
-          min: 6,
-          max: 15,
-          message: '用户名在6~15个字符之间',
-          trigger: 'blur'
-        }
       ],
-      email: [
-          { required: true, message: '请输入邮箱', trigger: 'blur' },
+      email: [// 自定义版本验证对象
           { validator:checkEmail, message: '邮箱格式不正确，请重新输入', trigger: 'blur'}
       ],
-      mobile: [
-          { required: true, message: '请输入手机号码', trigger: 'blur' },
-          { validator:checkMobile, message: '手机号码不正确，请重新输入', trigger: 'blur'}
-      ]
+      mobile: [ ]
     }
   }
 }
 ```
-E.当关闭对话框时，重置表单
-给el-dialog添加@close事件，在事件中添加重置表单的代码
-```
+​	**5.5** 当关闭对话框时，重置添加用户弹窗表单
+​			给el-dialog添加@close事件，在事件中添加重置表单的代码
+
+```javascript
 methods:{
   ....
   addDialogClosed(){
-      //对话框关闭之后，重置表达
+      //对话框关闭之后，通过引用重置表达
       this.$refs.addFormRef.resetFields();
   }
 }
 ```
-F.点击对话框中的确定按钮，发送请求完成添加用户的操作
-首先给确定按钮添加点击事件，在点击事件中完成业务逻辑代码
-```
+​	**5.6** 点击对话框中的确定按钮，**发送请求完成添加用户**的操作
+​			首先给确定按钮添加点击事件，在点击事件中完成业务逻辑代码
+
+```javascript
 methods:{
   ....
   addUser(){
