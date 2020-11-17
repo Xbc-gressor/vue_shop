@@ -20,7 +20,7 @@
         <!-- 侧边栏菜单区 -->
         <el-menu background-color="#333744"
           text-color="#fff"
-          active-text-color="#409EFF" unique-opened
+          active-text-color="#409EFF" :default-active="this.$route.path" unique-opened
           :collapse="isCollapse" :collapse-transition="false" router> <!--
                                                                   unique规定是否可以展开多个菜单
                                                                   collapse 折叠菜单
@@ -36,7 +36,8 @@
               <span>{{ item.authName }}</span>
             </template>
             <!-- 二级菜单 -->
-              <el-menu-item :index="'/'+subItem.path" v-for="subItem in item.children" :key="subItem.id">
+              <el-menu-item :index="'/'+subItem.path" v-for="subItem in item.children" :key="subItem.id"
+              @click="saveNavState('/' + subItem.path)">
                 <template>
                   <!-- 图标 -->
                   <i class="el-icon-menu"></i>
@@ -81,6 +82,7 @@ export default {
 
   created () {
     this.getMenuList();
+    this.activePath = window.sessionStorage.getItem("activePath")
   },
 
   methods: {
@@ -103,6 +105,11 @@ export default {
     toggleCollapse() {
       this.isCollapse = !this.isCollapse
     },
+    // 点击子路由，会存储活跃路由
+    saveNavState(activePath) {// 保存链接的激活状态，并且设置为高亮路径
+      window.sessionStorage.setItem('activePath', activePath)
+      this.activePath = activePath
+    }
   }
 
 }

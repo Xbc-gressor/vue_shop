@@ -8,6 +8,18 @@ import { Container, Header, Aside, Main } from 'element-ui'
 import { Menu, Submenu, MenuItem} from 'element-ui'
   // 导入弹框提示组件
 import { Message } from 'element-ui'
+  // 面包屑导航
+import { Breadcrumb, BreadcrumbItem } from 'element-ui'
+  // 卡片区
+import { Card, Row, Col} from 'element-ui'
+  // Table用户表格区
+import { Table, TableColumn, Switch, Tooltip } from 'element-ui'
+  // 页面
+import { Pagination } from 'element-ui'
+  // 对话框
+import { Dialog } from 'element-ui'
+  // 确认对话框
+import { MessageBox } from 'element-ui'
 
 // 全局注册
 Vue.use(Button)
@@ -23,5 +35,22 @@ Vue.use(Main)
 Vue.use(Menu)
 Vue.use(Submenu)
 Vue.use(MenuItem)
+
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+
+Vue.use(Card)
+Vue.use(Row)
+Vue.use(Col)
+
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Switch)
+Vue.use(Tooltip)
+
+Vue.use(Pagination)
+Vue.use(Dialog)
+
 // 不同之处：需要全局挂载，这样 $message 就是 Message 的别名
 Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm
