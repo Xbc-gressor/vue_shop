@@ -24,6 +24,8 @@ import { MessageBox } from 'element-ui'
 import { Select, Option} from 'element-ui'
   // tag
 import { Tag } from 'element-ui'
+  // 树形控件
+import { Tree } from 'element-ui'
 
 // 全局注册
 Vue.use(Button)
@@ -59,6 +61,8 @@ Vue.use(Select)
 Vue.use(Option)
 
 Vue.use(Tag)
+
+Vue.use(Tree)
 // 不同之处：需要全局挂载，这样 $message 就是 Message 的别名
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

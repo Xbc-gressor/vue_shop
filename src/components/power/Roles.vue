@@ -23,11 +23,12 @@
       <el-table :data="rolelist" border stripe>
         <!-- 展开列 -->  <!-- expand为展开列 -->
         <el-table-column type="expand">
-          <template v-slot="scope">
+          <template v-slot="scope"> <!-- 数组语法 -->
             <el-row :class="['bdbottom', i1 === 0 ? 'bdtop' : '', 'vcenter']" v-for="(item1, i1) in scope.row.children" :key="item1.id">
               <!-- 第一列：渲染一级权限 占据5列-->
               <el-col :span="5">
                 <el-tag closable @close="removeRightById(scope.row, item1.id)">{{item1.authName}}</el-tag>
+                <!-- 图标 -->
                 <i class="el-icon-caret-right"></i>
               </el-col>
               <!-- 第二三列：渲染二级和三级权限 占据19列-->
@@ -49,13 +50,15 @@
               {{scope.row}}
             </pre> -->
           </template>
+
+          <!-- 树形控件 -->
         </el-table-column>
         <!-- 索引列 -->
         <el-table-column type="index"></el-table-column>
         <el-table-column label="角色名称" prop="roleName"></el-table-column>
         <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
         <el-table-column label="操作" width="300px">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-button size="mini" type="primary" icon="el-icon-edit">编辑</el-button>
             <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
             <el-button size="mini" type="warning" icon="el-icon-setting" @click="showSetRightDialog(scope.row)">分配权限</el-button>
@@ -66,7 +69,7 @@
 
     <!-- 分配权限的对话框 -->
     <el-dialog title="分配权限" :visible.sync="setRightDialogVisible" width="50%" @close="setRightDialogClosed">
-      <!-- 树形控件 -->
+      <!-- 树形控件 -->                                        <!-- id来自data         默认展开                 默认选中的id数组值-->
       <el-tree :data="rightslist" :props="treeProps" show-checkbox node-key="id" default-expand-all :default-checked-keys="defKeys" ref="treeRef"></el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button @click="setRightDialogVisible = false">取 消</el-button>
@@ -88,8 +91,8 @@ export default {
       rightslist: [],
       // 树形控件的属性绑定对象
       treeProps: {
-        label: 'authName',
-        children: 'children'
+        label: 'authName', // 显示的字段
+        children: 'children' // 父子嵌套
       },
       // 默认选中的节点Id值数组
       defKeys: [],
@@ -175,7 +178,7 @@ export default {
     },
     // 点击为角色分配权限
     async allotRights() {
-      const keys = [
+      const keys = [ // 展开运算符
         ...this.$refs.treeRef.getCheckedKeys(),
         ...this.$refs.treeRef.getHalfCheckedKeys()
       ]
@@ -221,6 +224,7 @@ export default {
   border-bottom: 1px solid #eee;
 }
 
+// 类名中标记这个的都会居中对齐
 .vcenter {
   display: flex;
   align-items: center;
