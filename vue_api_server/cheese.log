@@ -154,3 +154,7 @@
 [2020-11-22T12:25:12.118] [DEBUG] cheese - admin
 [2020-11-22T12:25:12.122] [DEBUG] cheese - null
 [2020-11-22T12:25:12.122] [DEBUG] cheese - null
+[2020-11-23T13:13:20.190] [DEBUG] cheese - login => username:admin,password:123456
+[2020-11-23T13:13:20.193] [DEBUG] cheese - admin
+[2020-11-23T13:13:20.234] [DEBUG] cheese - null
+[2020-11-23T13:13:20.235] [DEBUG] cheese - null
